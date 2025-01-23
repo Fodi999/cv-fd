@@ -1,132 +1,197 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Image from "next/image";
-import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
-import { Sun, Moon, Mail } from "lucide-react";
+import Modal from "../components/ui/modal";
+import { Switch } from "../components/ui/switch";
+import { Label } from "../components/ui/label";
+import { Sun, Moon } from "lucide-react";
+import { useHomeLogic } from "./hooks/useHomeLogic";
 
-export default function Home() {
-  const [isDarkMode, setIsDarkMode] = useState(false);
-
-  useEffect(() => {
-    if (isDarkMode) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-  }, [isDarkMode]);
-
-  const images = [
-    { src: "/000034.jpg", alt: "Zdjęcie 1" },
-    { src: "/000029.jpg", alt: "Zdjęcie 2" },
-    { src: "/000027.jpg", alt: "Zdjęcie 3" },
-  ];
-
-  const mailtoLink = "mailto:fodi85999@gmail.com?subject=Witaj&body=Cześć, jak się masz?";
+const Home = () => {
+  const {
+    isModalOpen,
+    modalContent,
+    isDarkMode,
+    openModal,
+    closeModal,
+    setIsDarkMode,
+  } = useHomeLogic();
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-blue-100 via-purple-100 to-pink-100 dark:from-gray-800 dark:via-gray-900 dark:to-black flex flex-col items-center p-4 sm:p-6">
-      <div className="max-w-4xl w-full bg-white dark:bg-gray-800 shadow-lg rounded-lg p-4 sm:p-8 border border-gray-200 dark:border-gray-700">
-        <div className="flex flex-col sm:flex-row justify-between items-center mb-4 sm:mb-6">
-          <Image src="/feis 1.png" alt="Logo" className="rounded-full" width={80} height={80} />
-          <div className="flex items-center space-x-2 mt-4 sm:mt-0">
-            <Label htmlFor="theme-switch">Ciemny motyw</Label>
-            <Switch checked={isDarkMode} onCheckedChange={() => setIsDarkMode(!isDarkMode)} />
-            {isDarkMode ? <Moon className="w-5 h-5 text-gray-300" /> : <Sun className="w-5 h-5 text-yellow-500" />}
-          </div>
+    <div className={`min-h-screen p-4 sm:p-8 font-sans ${isDarkMode ? 'bg-black text-white' : 'bg-white text-black'}`}>
+      <div className="flex justify-end mb-4 items-center">
+        <Label htmlFor="theme-switch" className="mr-2">Dark Mode</Label>
+        <Switch id="theme-switch" checked={isDarkMode} onCheckedChange={() => setIsDarkMode(!isDarkMode)} />
+        <div className="ml-2">
+          {isDarkMode ? <Moon size={24} /> : <Sun size={24} />}
         </div>
-        <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-white text-center mb-4 sm:mb-6 font-bebas-neue">DMYTRO FOMIN</h1>
-        <p className="text-gray-700 dark:text-gray-300 text-center text-base sm:text-lg mb-2 font-bebas-neue">80-631 GDAŃSK</p>
-        <p className="text-gray-700 dark:text-gray-300 text-center text-base sm:text-lg mb-2 font-bebas-neue">UL. WILHELMA STRYJEWSKIEGO 39A/21</p>
-        <p className="text-gray-700 dark:text-gray-300 text-center text-base sm:text-lg mb-2 font-bebas-neue">
-          +48 576 212 418 | 
-          <a href={mailtoLink} className="text-blue-600 dark:text-blue-400 hover:underline inline-flex items-center">
-            <Mail className="w-4 h-4 mr-1" />
-            fodi85999@gmail.com
-          </a>
-        </p>
-        <p className="text-gray-700 dark:text-gray-300 text-center text-base sm:text-lg mb-4 font-bebas-neue">
-          <a href="https://instagram.com/fodifood" className="text-pink-600 dark:text-pink-400 hover:underline">Instagram: @fodifood</a>
-        </p>
+      </div>
 
-        <section className="mt-6 sm:mt-8">
-          <h2 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-gray-200 border-b-2 border-gray-300 dark:border-gray-600 pb-2 mb-4 font-bebas-neue">Sprawozdanie z badań</h2>
-          <div className="bg-gray-100 dark:bg-gray-700 rounded-lg p-4 shadow-md">
-            <p className="text-gray-700 dark:text-gray-300 font-bebas-neue">Nr. 17061/562/2023</p>
+      {isModalOpen && (
+        <Modal onClose={closeModal}>
+          {modalContent}
+        </Modal>
+      )}
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-auto">
+        {/* Information Section */}
+        <div className={`p-4 sm:p-6 rounded-md cursor-pointer ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-gray-200 text-black'}`} onClick={() => openModal(
+          <div className={`p-4 sm:p-6 rounded-md ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-gray-200 text-black'}`}>
+            <h3 className="text-xl sm:text-2xl font-bold mb-4">80-631 GDANSK</h3>
+            <p className="mb-2">WILHELMA STRиеВСКОГО 39A/21</p>
+            <p className="mb-2">DMITRY FOMIN</p>
+            <p className="mb-2">+48576212418</p>
+            <p className="mb-2">E-mail: <a href="mailto:fodi85999@gmail.com" className="text-blue-400">fodi85999@gmail.com</a></p>
+            <p className="mb-2">Instagram: <a href="https://instagram.com/" className="text-blue-400">https://instagram.com/</a></p>
+            <p className="mb-2">Foodfood</p>
+            <p>Test report No. 17061/562/2023</p>
           </div>
-        </section>
+        )}>
+          <h3 className="text-xl sm:text-2xl font-bold mb-4">80-631 GDANSK</h3>
+          <p className="mb-2">WILHELMA STRиеВСКОГО 39A/21</p>
+          <p className="mb-2">DMITRY FOMIN</p>
+          <p className="mb-2">+48576212418</p>
+          <p className="mb-2">E-mail: <a href="mailto:fodi85999@gmail.com" className="text-blue-400">fodi85999@gmail.com</a></p>
+          <p className="mb-2">Instagram: <a href="https://instagram.com/" className="text-blue-400">https://instagram.com/</a></p>
+          <p className="mb-2">Foodfood</p>
+          <p>Test report No. 17061/562/2023</p>
+        </div>
 
-        <section className="mt-6 sm:mt-8">
-          <h2 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-gray-200 border-b-2 border-gray-300 dark:border-gray-600 pb-2 mb-4 font-bebas-neue">Umiejętności</h2>
-          <div className="bg-gray-100 dark:bg-gray-700 rounded-lg p-4 shadow-md">
-            <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 space-y-2 font-bebas-neue">
-              <li>Celowy, towarzyski, odporny na stres, pomysłowy</li>
-              <li>Dużo wiem i rozumiem o produktach</li>
-              <li>Opracowuję także nowe produkty</li>
-              <li>Szkolę ludzi w zakresie prawidłowej pracy z produktami</li>
+        {/* Photo Section */}
+        <div className="relative group cursor-pointer" onClick={() => openModal(
+          <div>
+            <Image src="/000027.jpg" alt="Photo 1" className="rounded-md" width={600} height={400} priority />
+            <p className="text-center mt-4">80-631 GDANSK</p>
+          </div>
+        )}>
+          <Image src="/000027.jpg" alt="Photo 1" className="rounded-md filter grayscale group-hover:filter-none transition duration-300" width={600} height={400} priority />
+          <p className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 text-white p-2 rounded-md group-hover:opacity-0 transition duration-300">80-631 GDANSK</p>
+        </div>
+        <div className="relative group cursor-pointer" onClick={() => openModal(
+          <div>
+            <Image src="/000029.jpg" alt="Photo 2" className="rounded-md" width={400} height={300} priority />
+            <p className="text-center mt-4">WILHELMA STRиеВСКОГО 39A/21</p>
+          </div>
+        )}>
+          <Image src="/000029.jpg" alt="Photo 2" className="rounded-md filter grayscale group-hover:filter-none transition duration-300" width={400} height={300} priority />
+          <p className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 text-white p-2 rounded-md group-hover:opacity-0 transition duration-300">WILHELMA STRиеВСКОГО 39A/21</p>
+        </div>
+        <div className="relative group cursor-pointer" onClick={() => openModal(
+          <div>
+            <Image src="/000034.jpg" alt="Photo 3" className="rounded-md" width={500} height={350} priority />
+            <p className="text-center mt-4">DMITRY FOMIN</p>
+          </div>
+        )}>
+          <Image src="/000034.jpg" alt="Photo 3" className="rounded-md filter grayscale group-hover:filter-none transition duration-300" width={500} height={350} priority />
+          <p className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 text-white p-2 rounded-md group-hover:opacity-0 transition duration-300">DMITRY FOMIN</p>
+        </div>
+        <div className="relative group cursor-pointer" onClick={() => openModal(
+          <div>
+            <Image src="/000029.jpg" alt="Photo 4" className="rounded-md" width={600} height={400} priority />
+            <p className="text-center mt-4">+48576212418</p>
+          </div>
+        )}>
+          <Image src="/000029.jpg" alt="Photo 4" className="rounded-md filter grayscale group-hover:filter-none transition duration-300" width={600} height={400} priority />
+          <p className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 text-white p-2 rounded-md group-hover:opacity-0 transition duration-300">+48576212418</p>
+        </div>
+        <div className="relative group cursor-pointer" onClick={() => openModal(
+          <div>
+            <Image src="/000029.jpg" alt="Photo 5" className="rounded-md" width={400} height={300} />
+            <p className="text-center mt-4">E-mail: fodi85999@gmail.com</p>
+          </div>
+        )}>
+          <Image src="/000029.jpg" alt="Photo 5" className="rounded-md filter grayscale group-hover:filter-none transition duration-300" width={400} height={300} priority />
+          <p className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 text-white p-2 rounded-md group-hover:opacity-0 transition duration-300">E-mail: fodi85999@gmail.com</p>
+        </div>
+        <div className="relative group cursor-pointer" onClick={() => openModal(
+          <div>
+            <Image src="/000027.jpg" alt="Photo 6" className="rounded-md" width={500} height={350} priority />
+            <p className="text-center mt-4">Instagram: https://instagram.com/</p>
+          </div>
+        )}>
+          <Image src="/000027.jpg" alt="Photo 6" className="rounded-md filter grayscale group-hover:filter-none transition duration-300" width={500} height={350} priority />
+          <p className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 text-white p-2 rounded-md group-hover:opacity-0 transition duration-300">Instagram: https://instagram.com/</p>
+        </div>
+        <div className="relative group cursor-pointer" onClick={() => openModal(
+          <div>
+            <Image src="/000034.jpg" alt="Photo 7" className="rounded-md" width={600} height={400} priority />
+            <p className="text-center mt-4">Foodfood</p>
+          </div>
+        )}>
+          <Image src="/000034.jpg" alt="Photo 7" className="rounded-md filter grayscale group-hover:filter-none transition duration-300" width={600} height={400} priority />
+          <p className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 text-white p-2 rounded-md group-hover:opacity-0 transition duration-300">Foodfood</p>
+        </div>
+        <div className="relative group cursor-pointer" onClick={() => openModal(
+          <div>
+            <Image src="/000034.jpg" alt="Photo 8" className="rounded-md" width={400} height={300} priority />
+            <p className="text-center mt-4">Test report No. 17061/562/2023</p>
+          </div>
+        )}>
+          <Image src="/000034.jpg" alt="Photo 8" className="rounded-md filter grayscale group-hover:filter-none transition duration-300" width={400} height={300} priority />
+          <p className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 text-white p-2 rounded-md group-hover:opacity-0 transition duration-300">Test report No. 17061/562/2023</p>
+        </div>
+        <div className="relative group cursor-pointer" onClick={() => openModal(
+          <div>
+            <Image src="/000034.jpg" alt="Photo 9" className="rounded-md" width={500} height={350} priority />
+            <p className="text-center mt-4">Описание фото 9</p>
+          </div>
+        )}>
+          <Image src="/000034.jpg" alt="Photo 9" className="rounded-md filter grayscale group-hover:filter-none transition duration-300" width={500} height={350} priority />
+          <p className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 text-white p-2 rounded-md group-hover:opacity-0 transition duration-300">Описание фото 9</p>
+        </div>
+
+        {/* Skills Section */}
+        <div className={`p-4 sm:p-6 rounded-md cursor-pointer ${isDarkMode ? 'bg-gray-700 text-white' : 'bg-gray-300 text-black'}`} onClick={() => openModal(
+          <div className={`p-4 sm:p-6 rounded-md ${isDarkMode ? 'bg-gray-700 text-white' : 'bg-gray-300 text-black'}`}>
+            <h3 className="text-xl sm:text-2xl font-bold mb-4">SKILLS</h3>
+            <p>Goal-oriented, sociable, stress-resistant, resourceful. A lot I know and understand about products. I also develop new products and training people in the field of correct work with products.</p>
+          </div>
+        )}>
+          <h3 className="text-xl sm:text-2xl font-bold mb-4">SKILLS</h3>
+          <p>Goal-oriented, sociable, stress-resistant, resourceful. A lot I know and understand about products. I also develop new products and training people in the field of correct work with products.</p>
+        </div>
+
+        {/* Experience Section */}
+        <div className={`p-4 sm:p-6 rounded-md cursor-pointer ${isDarkMode ? 'bg-gray-600 text-white' : 'bg-gray-400 text-black'}`} onClick={() => openModal(
+          <div className={`p-4 sm:p-6 rounded-md ${isDarkMode ? 'bg-gray-600 text-white' : 'bg-gray-400 text-black'}`}>
+            <h3 className="text-xl sm:text-3xl font-bold mb-4">EXPERIENCE</h3>
+            <p>20 years of work abroad in restaurants in other countries:</p>
+            <ul className="list-disc list-inside">
+              <li>Poland, Lithuania, Estonia, Germany, France, Canada</li>
+              <li>FISH in HOUSE Company: <a href="https://instagram.com/fish_in" className="text-blue-400">https://instagram.com/fish_in</a></li>
+              <li>Dnepr house, Chef (June 2018 – June 2022): Development of new products, quality control, increasing durability, purchasing equipment for production processes. Sales volumes. Staff training, setting up the HACCP process production.</li>
+              <li>Author&apos;s restaurant, Honey Raspberry Poland, Zgorzelec - cook (May 2017 – May 2018): <a href="https://instagram.com/miodmalinyzgorzelec" className="text-blue-400">https://instagram.com/miodmalinyzgorzelec</a></li>
+              <li>France, Agde, Charlemagne restaurant. Cook - seafood (June 2022 – November 2022): <a href="https://instagram.com/bar_charlemagne" className="text-blue-400">https://instagram.com/bar_charlemagne</a></li>
+              <li>Canada, Montreal. WAWEL bakery and confectionery - chef (December 2022 – August 2023)</li>
             </ul>
           </div>
-        </section>
+        )}>
+          <h3 className="text-xl sm:text-3xl font-bold mb-4">EXPERIENCE</h3>
+          <p>20 years of work abroad in restaurants in other countries:</p>
+          <ul className="list-disc list-inside">
+            <li>Poland, Lithuania, Estonia, Germany, France, Canada</li>
+            <li>FISH in HOUSE Company: <a href="https://instagram.com/fish_in" className="text-blue-400">https://instagram.com/fish_in</a></li>
+            <li>Dnepr house, Chef (June 2018 – June 2022): Development of new products, quality control, increasing durability, purchasing equipment for production processes. Sales volumes. Staff training, setting up the HACCP process production.</li>
+            <li>Author&apos;s restaurant, Honey Raspberry Poland, Zgorzelec - cook (May 2017 – May 2018): <a href="https://instagram.com/miodmalinyzgorzelec" className="text-blue-400">https://instagram.com/miodmalinyzgorzelec</a></li>
+            <li>France, Agde, Charlemagne restaurant. Cook - seafood (June 2022 – November 2022): <a href="https://instagram.com/bar_charlemagne" className="text-blue-400">https://instagram.com/bar_charlemagne</a></li>
+            <li>Canada, Montreal. WAWEL bakery and confectionery - chef (December 2022 – August 2023)</li>
+          </ul>
+        </div>
 
-        <section className="mt-6 sm:mt-8">
-          <h2 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-gray-200 border-b-2 border-gray-300 dark:border-gray-600 pb-2 mb-4 font-bebas-neue">Staż pracy</h2>
-          <div className="bg-gray-100 dark:bg-gray-700 rounded-lg p-4 shadow-md space-y-4">
-            <ul className="list-disc list-inside text-gray-700 dark:text-gray-300 space-y-4 font-bebas-neue">
-              <li>20 lat Pracował za granicą w restauracjach w innych krajach: Polsce, Litwie, Estonii, Niemczech, Francji, Kanadzie.</li>
-              <li>
-                <strong>Firma FISH in HOUSE</strong> (Dniepr, Szef Kuchni, 10 czerwca 2018 r. – 1.06.2022)
-                <ul className="ml-4 list-disc list-inside space-y-2">
-                  <li>Opracowywanie nowych produktów</li>
-                  <li>Badanie jakości i zwiększanie trwałości</li>
-                  <li>Zakup urządzeń do procesów produkcyjnych</li>
-                  <li>Szkolenie personelu, HACCP, konfiguracja procesów produkcyjnych</li>
-                </ul>
-                <p><a href="https://instagram.com/fish_in_house" className="text-blue-600 dark:text-blue-400 hover:underline">Instagram: @fish_in_house</a></p>
-              </li>
-              <li>
-                <strong>Restauracja Autorska, Miod Malina Polska</strong> (Zgorzelec, Kucharz, 1 maja 2017 r. - 20 maja 2018 r.)
-                <p><a href="https://instagram.com/miodmalinyzgorzelec" className="text-blue-600 dark:text-blue-400 hover:underline">Instagram: @miodmalinyzgorzelec</a></p>
-              </li>
-              <li>
-                <strong>Francja, miasto Agde, Restauracja Charlemagne</strong> (Kucharz - owoce morza, 10.06.2022 - 16.11.2022)
-                <p><a href="https://instagram.com/bar_charlemagne" className="text-pink-600 dark:text-pink-400 hover:underline">Instagram: @bar_charlemagne</a></p>
-              </li>
-              <li>
-                <strong>Kanada, Montreal, Boulangerie Patisserie WAWEL</strong> (Kucharz, 1.12.2022 - 1.08.2023)
-              </li>
-            </ul>
+        {/* Education Section */}
+        <div className={`p-4 sm:p-6 rounded-md cursor-pointer ${isDarkMode ? 'bg-gray-500 text-white' : 'bg-gray-500 text-black'}`} onClick={() => openModal(
+          <div className={`p-4 sm:p-6 rounded-md ${isDarkMode ? 'bg-gray-500 text-white' : 'bg-gray-500 text-black'}`}>
+            <h3 className="text-xl sm:text-2xl font-bold mb-4">EDUCATION</h3>
+            <p>Certified Chef. Educational institution, Ukraine, Dnipro Vocational School No. 53 (September 2002 – May 2003). Graduated with honors, took part in internship at Charlie&apos;s restaurant.</p>
           </div>
-        </section>
-
-        <section className="mt-6 sm:mt-8">
-          <h2 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-gray-200 border-b-2 border-gray-300 dark:border-gray-600 pb-2 mb-4 font-bebas-neue">Edukacja</h2>
-          <div className="bg-gray-100 dark:bg-gray-700 rounded-lg p-4 shadow-md">
-            <p className="text-gray-700 dark:text-gray-300 font-bebas-neue">
-              Dyplomowany kucharz. Instytucja edukacyjna, Ukraina, Dniepr-Zawodowa Szkoła Techniczna-53
-              <br />
-              1 września 2002 - 31 maja 2003 Ukończył studia z wyróżnieniem, odbył staż w restauracji Charlie&apos;s
-            </p>
-          </div>
-        </section>
-
-        <section className="mt-6 sm:mt-8">
-          <h2 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-gray-200 border-b-2 border-gray-300 dark:border-gray-600 pb-2 mb-4 font-bebas-neue">Galeria</h2>
-          <Carousel className="relative">
-            <CarouselContent className="flex">
-              {images.map((image, index) => (
-                <CarouselItem key={index} className="relative w-full h-64 sm:h-80 lg:h-96">
-                  <Image src={image.src} alt={image.alt} fill sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" style={{ objectFit: "cover" }} />
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <CarouselPrevious className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-gray-800 bg-opacity-50 hover:bg-opacity-75 transition-opacity" />
-            <CarouselNext className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-gray-800 bg-opacity-50 hover:bg-opacity-75 transition-opacity" />
-          </Carousel>
-        </section>
+        )}>
+          <h3 className="text-xl sm:text-2xl font-bold mb-4">EDUCATION</h3>
+          <p>Certified Chef. Educational institution, Ukraine, Dnipro Vocational School No. 53 (September 2002 – May 2003). Graduated with honors, took part in internship at Charlie&apos;s restaurant.</p>
+        </div>
       </div>
     </div>
   );
-}
+};
 
+export default Home;
