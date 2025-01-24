@@ -53,7 +53,7 @@ const SectionWithImage: React.FC<SectionProps> = ({
           <DrawerContent>
             <DrawerHeader>
               <DrawerTitle>{title}</DrawerTitle>
-              <DrawerDescription>Описание содержимого</DrawerDescription>
+              <DrawerDescription></DrawerDescription>
             </DrawerHeader>
             <div className="p-4">
               <ContentComponent />
@@ -73,3 +73,4 @@ const SectionWithImage: React.FC<SectionProps> = ({
 };
 
 export default SectionWithImage;
+

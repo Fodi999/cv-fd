@@ -1,0 +1,23 @@
+{
+    "sections": [
+      {
+        "id": "about-me",
+        "title": "About Me",
+        "imageUrl": "/000034.jpg",
+        "description": "Hi! I&apos;m a passionate developer with years of experience in creating dynamic and responsive websites. I specialize in building modern user interfaces and providing seamless user experiences. My goal is to craft solutions that not only meet business needs but also delight users.",
+        "buttonText": "Learn More"
+      },
+      {
+        "id": "advanced-services",
+        "title": "Advanced Services",
+        "imageUrl": "/000034.jpg",
+        "description": "Discover our advanced services designed to cater to your unique needs. From UI/UX design to full-stack development, we&apos;ve got you covered."
+      },
+      {
+        "id": "contact-me",
+        "title": "Contact Me",
+        "imageUrl": "/000034.jpg",
+        "description": "Feel free to reach out to me anytime. I&apos;m here to help you with your projects and bring your ideas to life!"
+      }
+    ]
+  }
